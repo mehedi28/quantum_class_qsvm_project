@@ -10,9 +10,9 @@ Course project for the graduate Quantum Computing course at Texas Tech Universit
 
 | Member | Role |
 |---|---|
-| Md Mehedi Hasan (R11919067) | Quantum kernel design and implementation, train/val/test split, result analysis, literature review |
-| Rushikesh Reddy Bayyapu (R11870538) | Topic selection, data acquisition, feature analysis, ZZ feature map, result analysis |
-| Afahan Javed (R11985175) | Project template, coordination, writing and editing, literature review, result analysis |
+| Md Mehedi Hasan (R11919067) | Split train/test/validation set, Quantum kernel design and implementation, Built the ZZ feature map, Result analysis, Literature review |
+| Rushikesh Reddy Bayyapu (R11870538) | Topic selection, Data acquisition, Feature analysis, Result analysis, Literature review, Background study |
+| Afahan Javed (R11985175) | Prepare project template, Project coordination, Team meeting management, Literature review, Writing and editing, Result analysis |
 
 ---
 

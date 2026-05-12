@@ -91,6 +91,47 @@ See `requirements.txt`.
 
 All splits use `random_state=42`.
 
+---
+
+## Results
+
+| Model | Test Accuracy | Test F1 |
+|---|---|---|
+| Classical SVM (RBF) | 0.720 | 0.715 |
+| QSVM (ZZ kernel, 200 samples) | **0.740** | **0.738** |
+
+QSVM lifted the Flat-class F1 from 0.55 to 0.69. The crossover between classical and quantum sits between 100 and 200 training samples.
+
+---
+
+### Sample-size crossover
+
+The crossover between classical and quantum sits between 100 and 200 training samples:
+
+| Training samples | QSVM test acc | Classical SVM test acc |
+|---|---|---|
+| 100 | 0.583 | 0.700 |
+| 200 | 0.740 | 0.720 |
+| 300 | (see notebook Cell 22) | (see notebook Cell 22) |
+| 500 | (see notebook Cell 24) | (see notebook Cell 24) |
+
+---
+
+## Development log (7 documented attempts)
+
+The notebook logs every attempt in a running ASCII summary table (`Cell 6`, `show_summary()`). The failures are kept on purpose because they explain why the final design looks the way it does.
+
+| # | Approach | Outcome |
+|---|---|---|
+| 1 | QNN, 30 samples, η=0.04, finite-difference SGD | Failed. Loss flat 0.24-0.27. Shot noise overwhelmed the gradient signal. |
+| 2 | QNN, 80 samples, η=0.1, 30 epochs | Failed. Train acc 0.30-0.45, no learning trend. QNN abandoned. |
+| 3 | QSVM, Rx/Rz kernel, features in [0, π] | Failed. Discrimination gap < 0.10. No entanglement. |
+| 4 | QSVM, Rx/Rz kernel, features in [0, 2π] | Failed. Wider range helped but gap still below 0.15. No entanglement. |
+| 5 | QSVM, ZZ kernel, **broken adjoint** (feature map applied twice) | Failed. Self-kernel ≈ 0.07 instead of 1.0. Mathematically invalid. |
+| 6 | QSVM, ZZ kernel, **fixed adjoint**, 100 samples | Partial. QSVM test acc 0.583, classical 0.700. Below classical. |
+| 7 | QSVM, ZZ kernel, fixed adjoint, **200 samples** | Success. QSVM test acc 0.740, classical 0.720. QSVM wins. |
+
+Cells 21-24 extend the run to 300 and 500 training samples to map the scaling curve past the crossover.
 
 ### Features (one per qubit)
 
@@ -148,49 +189,6 @@ clf.fit(K_train, Y_train)
 ```
 
 The classical baseline uses `svm.SVC(kernel="rbf", probability=True, class_weight="balanced", random_state=42)` on the same feature subset.
-
----
-
-## Results
-
-| Model | Test Accuracy | Test F1 |
-|---|---|---|
-| Classical SVM (RBF) | 0.720 | 0.715 |
-| QSVM (ZZ kernel, 200 samples) | **0.740** | **0.738** |
-
-QSVM lifted the Flat-class F1 from 0.55 to 0.69. The crossover between classical and quantum sits between 100 and 200 training samples.
-
----
-
-### Sample-size crossover
-
-The crossover between classical and quantum sits between 100 and 200 training samples:
-
-| Training samples | QSVM test acc | Classical SVM test acc |
-|---|---|---|
-| 100 | 0.583 | 0.700 |
-| 200 | 0.740 | 0.720 |
-| 300 | (see notebook Cell 22) | (see notebook Cell 22) |
-| 500 | (see notebook Cell 24) | (see notebook Cell 24) |
-
----
-
-## Development log (7 documented attempts)
-
-The notebook logs every attempt in a running ASCII summary table (`Cell 6`, `show_summary()`). The failures are kept on purpose because they explain why the final design looks the way it does.
-
-| # | Approach | Outcome |
-|---|---|---|
-| 1 | QNN, 30 samples, η=0.04, finite-difference SGD | Failed. Loss flat 0.24-0.27. Shot noise overwhelmed the gradient signal. |
-| 2 | QNN, 80 samples, η=0.1, 30 epochs | Failed. Train acc 0.30-0.45, no learning trend. QNN abandoned. |
-| 3 | QSVM, Rx/Rz kernel, features in [0, π] | Failed. Discrimination gap < 0.10. No entanglement. |
-| 4 | QSVM, Rx/Rz kernel, features in [0, 2π] | Failed. Wider range helped but gap still below 0.15. No entanglement. |
-| 5 | QSVM, ZZ kernel, **broken adjoint** (feature map applied twice) | Failed. Self-kernel ≈ 0.07 instead of 1.0. Mathematically invalid. |
-| 6 | QSVM, ZZ kernel, **fixed adjoint**, 100 samples | Partial. QSVM test acc 0.583, classical 0.700. Below classical. |
-| 7 | QSVM, ZZ kernel, fixed adjoint, **200 samples** | Success. QSVM test acc 0.740, classical 0.720. QSVM wins. |
-
-Cells 21-24 extend the run to 300 and 500 training samples to map the scaling curve past the crossover.
-
 
 ## What each cell does
 

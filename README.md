@@ -89,8 +89,7 @@ See `requirements.txt`.
 
 ## Reproducibility
 
-All splits use `random_state=42`. The Qiskit `BasicSimulator` is shot-based, so kernel values vary at the 1/sqrt(shots) level between runs. With 4,000 shots this is below 0.02 per kernel entry and does not change the qualitative result. The classical SVM is fully deterministic given the same split.
-
+All splits use `random_state=42`.
 ---
 
 ### Features (one per qubit)

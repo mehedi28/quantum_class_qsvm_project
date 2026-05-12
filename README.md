@@ -87,10 +87,10 @@ See `requirements.txt`.
 
 ---
 
-## Reproducibility
+### Reproducibility
 
 All splits use `random_state=42`.
----
+
 
 ### Features (one per qubit)
 
